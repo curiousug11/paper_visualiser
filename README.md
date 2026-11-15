@@ -107,7 +107,7 @@ Python 3.12 is available (`brew install uv` is easiest).
 Start Claude Code in a working folder, attach or point to the paper, and ask:
 
 ```
-Make a 3b1b-style video for paper.pdf, around 3-4 minutes. Go all out.
+Make a 3b1b-style video for paper.pdf, around 3-4 minutes.
 ```
 
 More examples:
