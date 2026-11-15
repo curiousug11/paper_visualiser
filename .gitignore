@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+media/
+media_*/
+audio/
+out/
+logs/

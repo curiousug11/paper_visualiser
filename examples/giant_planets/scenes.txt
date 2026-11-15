@@ -1,0 +1,7 @@
+# Scene classes in playback order
+S0Hook
+S1Mass
+S2Split
+S3Apps
+S4Disk
+S5Outro

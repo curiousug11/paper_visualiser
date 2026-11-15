@@ -1,0 +1,3 @@
+# Scene classes in playback order (one per line). Each class's KEY must match a key in narration.py.
+S0Hook
+S1Idea
