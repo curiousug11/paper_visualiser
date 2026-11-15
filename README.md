@@ -9,21 +9,25 @@ It is a free, open-source [Claude Code](https://code.claude.com/docs) **skill** 
 video. It reads the paper, writes the script, generates the narration, builds the animations,
 checks the rendered frames for layout problems and delivers a finished MP4.
 
-**Example:** [`videos/giant_planets_explainer.mp4`](videos/giant_planets_explainer.mp4) is a 4-minute
-explainer of Chachan, Murray-Clay & Fortney, *Quantitative Links between Formation and Atmospheric
-Composition for Giant Planets* ([arXiv:2608.23682](https://arxiv.org/abs/2608.23682)). Its full
-source is in [`examples/giant_planets/`](examples/giant_planets/).
+**Example videos** (1080p60):
+- [`videos/giant_planets_explainer.mp4`](videos/giant_planets_explainer.mp4) (4 min) explains
+  Chachan, Murray-Clay & Fortney, *Quantitative Links between Formation and Atmospheric
+  Composition for Giant Planets* ([arXiv:2608.23682](https://arxiv.org/abs/2608.23682)). Its full
+  source is in [`examples/giant_planets/`](examples/giant_planets/).
+- [`videos/ASTER_explainer.mp4`](videos/ASTER_explainer.mp4) (3 min) explains Panek, Roman,
+  Shukla, Pagliaro, Matcheva & Matchev, *ASTER: Agentic Science Toolkit for Exoplanet Research*
+  ([arXiv:2603.26953](https://arxiv.org/abs/2603.26953)).
 
 ---
 
 ## Contents
 - [What you get](#what-you-get)
-- [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage with Claude Code](#usage-with-claude-code)
 - [Usage without Claude Code](#usage-without-claude-code)
 - [Making a video by hand](#making-a-video-by-hand)
 - [How it works](#how-it-works)
+- [Requirements](#requirements)
 - [Customisation](#customisation)
 - [Troubleshooting](#troubleshooting)
 - [Repository layout](#repository-layout)
@@ -43,16 +47,6 @@ source is in [`examples/giant_planets/`](examples/giant_planets/).
   overlaps and off-screen elements before the final render.
 - **Finished audio**: a quiet procedural music bed and loudness normalisation (−16 LUFS). A
   voice-only version is produced as well.
-
-## Requirements
-| | |
-|---|---|
-| OS | Linux (Ubuntu/Debian tested) or macOS. On Windows, use WSL2 (Ubuntu). |
-| Python | **3.12** (Kokoro's dependencies don't build on 3.13). [`uv`](https://docs.astral.sh/uv/) is recommended; setup uses it if present. |
-| System packages | LaTeX (`texlive-latex-extra`, `texlive-science`, `cm-super`), `dvisvgm`, `ffmpeg`, Pango/Cairo dev libraries, `espeak-ng` |
-| Hardware | Any modern CPU; no GPU needed. About 4 GB of disk for dependencies. |
-| Network | Needed once, to download the Kokoro voice model and the spaCy English model. |
-| Claude Code | Needed for the automated workflow; [install guide](https://code.claude.com/docs). Not needed for the manual pipeline. |
 
 ## Installation
 
@@ -78,8 +72,10 @@ contains `.claude/skills/paper-video/`) in a session. The skill loads automatica
 To check that it's installed, start `claude` and type `/paper-video`. It should appear in the
 command list.
 
-### 2. Install the dependencies
-Run the setup script once. It is safe to re-run:
+### 2. Install the dependencies (optional — Claude can do this)
+Claude runs this step itself the first time you ask for a video, so you can skip it. See
+[Requirements](#requirements) for the few things it can't install for you. To do it yourself,
+run the setup script once. It is safe to re-run:
 ```bash
 bash ~/.claude/skills/paper-video/scripts/setup.sh
 # option B: bash .claude/skills/paper-video/scripts/setup.sh
@@ -98,8 +94,6 @@ whenever you render.
 Install [MacTeX](https://www.tug.org/mactex/), or BasicTeX plus the packages listed in
 [Manim's installation docs](https://docs.manim.community/en/stable/installation.html). Make sure
 Python 3.12 is available (`brew install uv` is easiest).
-
-You can also skip this step: Claude runs the setup script itself the first time you ask for a video.
 
 ### 3. Smoke test (optional, about 1 minute)
 ```bash
@@ -189,6 +183,27 @@ assemble.sh ── concat in scenes.txt order + music bed + loudnorm ──▶ o
 ```
 Change the narration, rerun `tts.py`, re-render, and the animations re-sync automatically.
 
+## Requirements
+**You don't need to install most of this yourself.** The first time you ask for a video, Claude
+runs the bundled setup script and installs the Python environment, Manim, Kokoro, the voice model
+and, on Debian/Ubuntu, the system packages. You only need to provide:
+- **Claude Code** itself ([install guide](https://code.claude.com/docs));
+- **your password for `sudo`**, if you aren't root and system packages are missing (Claude can't
+  type it; run `setup.sh` yourself or install the packages it prints);
+- on **macOS**: Homebrew and a LaTeX distribution (MacTeX), which need interactive installers;
+- on **Windows**: WSL2 with Ubuntu, then everything else runs inside it.
+
+The full list, for reference or for setting up without Claude:
+
+| | |
+|---|---|
+| OS | Linux (Ubuntu/Debian tested) or macOS. On Windows, use WSL2 (Ubuntu). |
+| Python | **3.12** (Kokoro's dependencies don't build on 3.13). [`uv`](https://docs.astral.sh/uv/) is recommended; setup uses it if present. |
+| System packages | LaTeX (`texlive-latex-extra`, `texlive-science`, `cm-super`), `dvisvgm`, `ffmpeg`, Pango/Cairo dev libraries, `espeak-ng` |
+| Hardware | Any modern CPU; no GPU needed. About 4 GB of disk for dependencies. |
+| Network | Needed once, to download the Kokoro voice model and the spaCy English model. |
+| Claude Code | Needed for the automated workflow; [install guide](https://code.claude.com/docs). Not needed for the manual pipeline. |
+
 ## Customisation
 | What | Where |
 |---|---|
@@ -229,7 +244,7 @@ Change the narration, rerun `tts.py`, re-render, and the animations re-sync auto
 │   └── tools/                   # contact_sheet.sh, frame.sh, music.py
 └── examples/                    # the giant-planets video, for Claude to learn from
 examples/giant_planets/          # same example as a ready-to-render project
-videos/                          # rendered example video
+videos/                          # rendered example videos
 PROMPT.md                        # copy-paste version of the workflow
 ```
 
@@ -237,8 +252,9 @@ PROMPT.md                        # copy-paste version of the workflow
 - [Manim Community Edition](https://www.manim.community/) for animation.
 - [Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M) by hexgrad for text-to-speech.
 - Visual style inspired by [3Blue1Brown](https://www.3blue1brown.com/).
-- Example paper: Chachan, Murray-Clay & Fortney (2026), arXiv:2608.23682. The video is an
-  independent explainer and is not affiliated with the authors.
+- Example papers: Chachan, Murray-Clay & Fortney (2026), arXiv:2608.23682 (an independent
+  explainer, not affiliated with the authors); Panek, Roman, Shukla, Pagliaro, Matcheva &
+  Matchev (2026), arXiv:2603.26953.
 
 ## License
 Released under the [MIT License](LICENSE): free to use, modify and redistribute, including
