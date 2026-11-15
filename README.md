@@ -1,9 +1,11 @@
 # paper_visualiser
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 Turn a research paper into a **3Blue1Brown-style explainer video**: Manim animations, Kokoro
 text-to-speech narration, every animation timed to the sentence that describes it, 1080p60 output.
 
-It ships as a [Claude Code](https://code.claude.com/docs) **skill**. Give Claude a PDF and ask for a
+It is a free, open-source [Claude Code](https://code.claude.com/docs) **skill** (MIT licence). Give Claude a PDF and ask for a
 video. It reads the paper, writes the script, generates the narration, builds the animations,
 checks the rendered frames for layout problems and delivers a finished MP4.
 
@@ -26,6 +28,7 @@ source is in [`examples/giant_planets/`](examples/giant_planets/).
 - [Troubleshooting](#troubleshooting)
 - [Repository layout](#repository-layout)
 - [Credits](#credits)
+- [License](#license)
 
 ## What you get
 - A **story-first workflow**: hook → one scene per key idea → real results → recap, with one
@@ -236,3 +239,11 @@ PROMPT.md                        # copy-paste version of the workflow
 - Visual style inspired by [3Blue1Brown](https://www.3blue1brown.com/).
 - Example paper: Chachan, Murray-Clay & Fortney (2026), arXiv:2608.23682. The video is an
   independent explainer and is not affiliated with the authors.
+
+## License
+Released under the [MIT License](LICENSE): free to use, modify and redistribute, including
+commercially, as long as the copyright notice is kept. Contributions are welcome via issues and
+pull requests.
+
+Third-party tools keep their own licences: Manim (MIT) and Kokoro-82M (Apache 2.0) are installed
+by `setup.sh` and are not bundled in this repository.
